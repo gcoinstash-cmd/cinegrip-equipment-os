@@ -1,63 +1,81 @@
 import React, { useState } from 'react';
 import { 
-  Shield, Award, ArrowRight, Calendar, DollarSign, Lock, 
-  ChevronRight, CheckCircle2, Sparkles, Layers, Terminal, Server,
-  AlertCircle, Check, Phone, Camera, PenTool, Flame, Truck, Star
+  Camera, Shield, Award, Calendar, DollarSign, Lock, ArrowRight, Check, 
+  Layers, FileText, CheckCircle2, Film, Video, Upload, Trash2, Box, Eye
 } from 'lucide-react';
 import { AdminPortalModal } from './AdminPortalModal.tsx';
 
-interface ShowcaseItem {
+interface GearItem {
   id: string;
-  title: string;
-  subtitle: string;
-  rate: string;
-  status: string;
-  features: string[];
+  name: string;
+  category: 'camera' | 'lenses' | 'grip' | 'monitoring';
+  dayRate: number;
+  replacementValue: number;
+  status: 'IN_LOCKER' | 'ON_PRODUCTION' | 'PREP_BAY';
+  specs: string[];
   img: string;
 }
 
-const ITEMS: ShowcaseItem[] = [
+const GEAR: GearItem[] = [
   {
-    "id": "CAM-ALEXA35",
-    "title": "ARRI Alexa 35 4.6K Super 35 Cinema Kit",
-    "subtitle": "17 Stops Dynamic Range // REVEAL Color Science // LPL + PL Mount",
-    "rate": "$1,450 / Day • $4,350 / 3-Day Wk",
-    "status": "CHECKOUT READY // STAGE BAY A",
-    "features": [
-      "3x 2TB Codex Compact Drives + Reader",
-      "SmallHD Cine 7 On-Camera Monitor",
-      "ARRI Production Cage & BP-8 Bridge Plate",
-      "Core SWX Helix Dual-Voltage Gold Mounts"
-    ],
-    "img": "https://images.unsplash.com/photo-1512790182412-b19e6d62bc39"
+    id: 'CAM-ALEXA35',
+    name: 'ARRI Alexa 35 4.6K Super 35 Production Kit',
+    category: 'camera',
+    dayRate: 1450,
+    replacementValue: 85000,
+    status: 'IN_LOCKER',
+    specs: ['17 Stops Dynamic Range', '3x 2TB Codex Compact Drives', 'LPL Mount + PL Adapter', 'SmallHD Cine 7 Monitor'],
+    img: 'https://images.unsplash.com/photo-1512790182412-b19e6d62bc39'
   },
   {
-    "id": "LENS-COOKE-FF",
-    "title": "Cooke Anamorphic/i Full Frame Plus 4-Lens Set",
-    "subtitle": "32mm, 40mm, 75mm, 100mm // T2.3 // Classic Cooke Look",
-    "rate": "$1,800 / Day • $5,400 / Wk",
-    "status": "COLIMATED // VAULT 02",
-    "features": [
-      "Consistent 1.8x Squeeze Ratio",
-      "/i Technology Lens Metadata Contacts",
-      "Oval Bokeh & Flare Characteristics",
-      "Custom Flight Cases Included"
-    ],
-    "img": "https://images.unsplash.com/photo-1485846234645-a62644f84728"
+    id: 'CAM-RED-V',
+    name: 'RED V-Raptor XL 8K VV Cinema Package',
+    category: 'camera',
+    dayRate: 1250,
+    replacementValue: 55000,
+    status: 'PREP_BAY',
+    specs: ['8K Large Format Sensor', 'Integrated Electronic ND (2-7 Stops)', '120fps @ 8K 17:9', '4x 2TB RED PRO CFexpress'],
+    img: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d'
   },
   {
-    "id": "GRIP-5TON-PKG",
-    "title": "5-Ton Grip & Lighting Production Truck",
-    "subtitle": "Rolling Cart System // Aputure 1200d, Nova P600c & Dana Dolly",
-    "rate": "$2,100 / Day + Mileage",
-    "status": "YARD STAGED // SOUNDSTAGE 4",
-    "features": [
-      "Speed Rail & Modern Rigging Hardware",
-      "Full 12x12 & 20x20 Overhead Rags",
-      "Honda EU7000 Inverter Generators",
-      "Certified Driver & Key Grip Dispatch Option"
-    ],
-    "img": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d"
+    id: 'LENS-COOKE-FF',
+    name: 'Cooke Anamorphic/i Full Frame Plus 4-Lens Set',
+    category: 'lenses',
+    dayRate: 1800,
+    replacementValue: 140000,
+    status: 'IN_LOCKER',
+    specs: ['32mm, 40mm, 75mm, 100mm T2.3', '1.8x Anamorphic Squeeze', '/i Technology Lens Metadata', 'Classic Cooke Organic Flare'],
+    img: 'https://images.unsplash.com/photo-1485846234645-a62644f84728'
+  },
+  {
+    id: 'LENS-ARRI-SIGNATURE',
+    name: 'ARRI Signature Prime 3-Lens Trio (24, 47, 75mm)',
+    category: 'lenses',
+    dayRate: 1350,
+    replacementValue: 95000,
+    status: 'IN_LOCKER',
+    specs: ['LPL Native Mount // T1.8', 'Magnesium Lightweight Barrel', 'Soft Creamy Bokeh Falloff', 'Magnetic Rear Filter Holder'],
+    img: 'https://images.unsplash.com/photo-1533105079780-92b9be482077'
+  },
+  {
+    id: 'GRIP-5TON-PKG',
+    name: '5-Ton Grip & Electric Rolling Package',
+    category: 'grip',
+    dayRate: 2100,
+    replacementValue: 120000,
+    status: 'IN_LOCKER',
+    specs: ['Aputure 1200d & Nova P600c LED', '12x12 & 20x20 Overhead Frame Rags', 'Dana Dolly Portable Track System', 'Speed Rail & Rigging Hardware'],
+    img: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d'
+  },
+  {
+    id: 'MON-TERADEK-BOLT',
+    name: 'Teradek Bolt 4K MAX 750 Transmitter & 2x RX',
+    category: 'monitoring',
+    dayRate: 550,
+    replacementValue: 18500,
+    status: 'IN_LOCKER',
+    specs: ['Zero-Delay 4K HDR Wireless Video', '750ft Line of Sight Range', 'Director Handheld Monitor Rig', 'Gold-Mount Battery Plates'],
+    img: 'https://images.unsplash.com/photo-1512790182412-b19e6d62bc39'
   }
 ];
 
@@ -69,254 +87,278 @@ export default function App() {
       window.location.hash === '#admin'
     )
   );
-  const [selectedItem, setSelectedItem] = useState(ITEMS[0].id);
-  const [inquiryName, setInquiryName] = useState('');
-  const [inquiryPhone, setInquiryPhone] = useState('');
+
+  const [activeCategory, setActiveCategory] = useState<'all' | 'camera' | 'lenses' | 'grip' | 'monitoring'>('all');
+  const [cart, setCart] = useState<string[]>(['CAM-ALEXA35', 'LENS-COOKE-FF']);
+  const [rentalDuration, setRentalDuration] = useState<'1day' | '3day-week' | 'feature-month'>('3day-week');
+  const [coiUploaded, setCoiUploaded] = useState(true);
+  const [prodCompany, setProdCompany] = useState('');
+  const [producerPhone, setProducerPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  // Cart operations
+  const toggleCart = (id: string) => {
+    if (cart.includes(id)) {
+      setCart(cart.filter(item => item !== id));
+    } else {
+      setCart([...cart, id]);
+    }
+  };
+
+  const filteredGear = activeCategory === 'all' 
+    ? GEAR 
+    : GEAR.filter(g => g.category === activeCategory);
+
+  // Multiplier: industry standard 3-day week gives 7 calendar days!
+  const multiplier = rentalDuration === '1day' ? 1 : rentalDuration === '3day-week' ? 3 : 9;
+
+  const totalDayRate = cart.reduce((sum, id) => {
+    const item = GEAR.find(g => g.id === id);
+    return sum + (item ? item.dayRate : 0);
+  }, 0);
+
+  const totalRentalCost = totalDayRate * multiplier;
+  const totalReplacementLiability = cart.reduce((sum, id) => {
+    const item = GEAR.find(g => g.id === id);
+    return sum + (item ? item.replacementValue : 0);
+  }, 0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inquiryName || !inquiryPhone) return;
+    if (!prodCompany || !producerPhone) return;
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setInquiryName('');
-      setInquiryPhone('');
+      setProdCompany('');
+      setProducerPhone('');
     }, 4000);
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-zinc-100 font-sans selection:bg-rose-500/20 selection:text-rose-400">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0A0A0B]/90 backdrop-blur-md border-b border-zinc-800/80 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 flex items-center justify-center text-white font-extrabold shadow-lg shadow-rose-600/20">
-              <Sparkles className="w-5 h-5 text-white" />
+    <div className="min-h-screen bg-[#0A0A0B] text-zinc-100 font-sans flex flex-col md:flex-row selection:bg-amber-500/20 selection:text-amber-400">
+      {/* Persistent Left Industrial Side-Rail */}
+      <aside className="w-full md:w-64 bg-[#121214] border-r border-zinc-800 p-6 flex flex-col justify-between flex-shrink-0">
+        <div>
+          {/* Logo / Header */}
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center text-zinc-950 font-black shadow-lg shadow-amber-500/20">
+              <Camera className="w-5 h-5 text-zinc-950" />
             </div>
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-rose-500 font-semibold">Cinema Camera, Grip & Lighting Rental House OS</span>
-              <h1 className="text-lg font-bold tracking-tight text-white leading-none">CINEGRIP EQUIPMENT OS</h1>
+              <span className="text-[10px] font-mono text-amber-500 uppercase tracking-widest block font-bold">STAGE EQUIPMENT VAULT</span>
+              <h1 className="text-sm font-extrabold text-white leading-none">CINEGRIP OS</h1>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-8 text-xs font-medium uppercase tracking-wider text-zinc-400">
-            <a href="#packages" className="hover:text-rose-400 transition">Services</a>
-            <a href="#specs" className="hover:text-rose-400 transition">Standards</a>
-            <a href="#booking" className="hover:text-rose-400 transition">Reserve Session</a>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsAdminOpen(true)}
-              className="px-4 py-2 rounded-lg bg-zinc-900 border border-rose-500/40 text-rose-400 hover:bg-rose-500/10 text-xs font-mono uppercase tracking-wider transition flex items-center gap-2"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>[ STUDIO PASS ]</span>
-            </button>
-          </div>
+          {/* Side-Rail Categories */}
+          <nav className="space-y-1.5 text-xs font-mono">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-widest block mb-2 px-2">GEAR LOCKERS</span>
+            {[
+              { id: 'all', label: 'All Equipment' },
+              { id: 'camera', label: 'Cinema Cameras' },
+              { id: 'lenses', label: 'Anamorphic Glass' },
+              { id: 'grip', label: 'Grip & Electric' },
+              { id: 'monitoring', label: 'Wireless & Video' },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id as any)}
+                className={`w-full text-left px-3 py-2.5 rounded-xl transition flex items-center justify-between ${
+                  activeCategory === cat.id 
+                    ? 'bg-amber-500 text-zinc-950 font-bold shadow-md shadow-amber-500/20' 
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+                }`}
+              >
+                <span>{cat.label}</span>
+                {activeCategory === cat.id && <span className="w-1.5 h-1.5 rounded-full bg-zinc-950"></span>}
+              </button>
+            ))}
+          </nav>
         </div>
-      </header>
 
-      {/* Hero */}
-      <section className="relative pt-20 pb-24 px-6 overflow-hidden border-b border-zinc-800">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(244,63,94,0.15),rgba(255,255,255,0))]"></div>
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono mb-6">
-            <Star className="w-3.5 h-3.5" />
-            <span>PREMIUM STUDIO ENGINE • 9.8 VERIFIED PRODUCTION GRADE</span>
-          </div>
-
-          <h2 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
-            CINEGRIP <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-red-500">EQUIPMENT OS</span>
-          </h2>
-
-          <p className="mt-6 text-lg sm:text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed">
-            Cinema Packages, Sub-Rental Tracking & Insurance Vault. Precision craft, dedicated client portals, and turnkey Supabase PostgreSQL database schemas.
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="#booking"
-              className="px-8 py-3.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-zinc-950 font-bold text-sm tracking-wide transition shadow-lg shadow-rose-500/25 flex items-center gap-2"
-            >
-              <span>Book Priority Session</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
-            <button
-              onClick={() => setIsAdminOpen(true)}
-              className="px-8 py-3.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-rose-500/40 text-zinc-200 text-sm font-semibold transition flex items-center gap-2"
-            >
-              <span>Launch Studio OS</span>
-              <span className="text-rose-400 font-mono text-xs font-bold">[cinegrip2026]</span>
-            </button>
-          </div>
-
-          {/* Metrics Ticker */}
-          <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
-            
-              <div key="ACTIVE RENTAL PACKAGES" className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-sm">
-                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">ACTIVE RENTAL PACKAGES</span>
-                <p className="text-lg sm:text-xl font-bold font-mono text-rose-400 mt-1">{"280 PACKAGES"}</p>
-              </div>
-            
-              <div key="INSURANCE VERIFICATION" className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-sm">
-                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">INSURANCE VERIFICATION</span>
-                <p className="text-lg sm:text-xl font-bold font-mono text-rose-400 mt-1">{"100% PRE-CHECKED"}</p>
-              </div>
-            
-              <div key="SUB-RENTAL REVENUE MARGIN" className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-sm">
-                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">SUB-RENTAL REVENUE MARGIN</span>
-                <p className="text-lg sm:text-xl font-bold font-mono text-rose-400 mt-1">{"42.5%"}</p>
-              </div>
-            
-              <div key="EQUIPMENT READINESS" className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-sm">
-                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">EQUIPMENT READINESS</span>
-                <p className="text-lg sm:text-xl font-bold font-mono text-rose-400 mt-1">{"99.8% PREPPED"}</p>
-              </div>
-            
-          </div>
-        </div>
-      </section>
-
-      {/* Showcase Grid */}
-      <section id="packages" className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        {/* Bottom Locker Stats & Admin Door */}
+        <div className="pt-6 border-t border-zinc-800/80 space-y-4 text-xs font-mono">
           <div>
-            <span className="text-xs font-mono text-rose-500 uppercase tracking-widest block mb-2">CURATED TIERS & PACKAGES</span>
-            <h3 className="text-3xl font-extrabold text-white">Signature Studio Services</h3>
+            <span className="text-[10px] text-zinc-500 uppercase block">GEAR READINESS</span>
+            <span className="text-sm font-bold text-amber-400 font-mono">99.8% QC CHECKED</span>
           </div>
-          <span className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">100% Verified Quality & VIP Gate</span>
+
+          <button
+            onClick={() => setIsAdminOpen(true)}
+            className="w-full py-2.5 px-3 rounded-xl bg-zinc-900 border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 font-bold transition flex items-center justify-center gap-1.5"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>[ CINEGRIP PASS ]</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-5xl">
+        {/* Top Operational Status Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-zinc-800 mb-8">
+          <div>
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-mono mb-1">
+              <Film className="w-3 h-3" />
+              <span>HOLLYWOOD & INDIE PRODUCTION READY // 3-DAY WEEK RATES</span>
+            </div>
+            <h2 className="text-2xl font-extrabold text-white">Cinema Rental Manifest & Sub-Rentals</h2>
+          </div>
+
+          {/* Shoot Duration Selector */}
+          <div className="flex items-center gap-2 bg-zinc-900 p-1 rounded-xl border border-zinc-800 text-xs font-mono">
+            {[
+              { id: '1day', label: '1 Day Shoot (1x)' },
+              { id: '3day-week', label: '3-Day Week (7 Days!)' },
+              { id: 'feature-month', label: 'Feature Run (30 Days)' }
+            ].map((d) => (
+              <button
+                key={d.id}
+                onClick={() => setRentalDuration(d.id as any)}
+                className={`px-3 py-1.5 rounded-lg transition ${
+                  rentalDuration === d.id ? 'bg-amber-500 text-zinc-950 font-bold' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                {d.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {ITEMS.map((item) => (
-            <div 
-              key={item.id}
-              className="group rounded-2xl bg-[#121214] border border-zinc-800 hover:border-rose-500/40 transition-all overflow-hidden flex flex-col shadow-xl"
-            >
-              <div className="relative h-56 overflow-hidden bg-zinc-900">
-                <img 
-                  src={item.img} 
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#121214] via-transparent to-transparent"></div>
-                <div className="absolute top-4 right-4 px-2.5 py-1 rounded bg-black/70 backdrop-blur-md border border-zinc-700 text-[11px] font-mono font-bold text-rose-400">
-                  {item.status}
-                </div>
-              </div>
-
-              <div className="p-6 flex-1 flex flex-col justify-between">
+        {/* Master Gear Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {filteredGear.map((item) => {
+            const inCart = cart.includes(item.id);
+            return (
+              <div 
+                key={item.id}
+                className={`p-5 rounded-2xl border transition flex flex-col justify-between ${
+                  inCart 
+                    ? 'bg-amber-950/15 border-amber-500/50 shadow-xl' 
+                    : 'bg-[#121214] border-zinc-800 hover:border-zinc-700'
+                }`}
+              >
                 <div>
-                  <span className="text-xs font-mono text-rose-400 uppercase tracking-wider block mb-1">{item.id}</span>
-                  <h4 className="text-xl font-bold text-white mb-2 leading-tight">{item.title}</h4>
-                  <p className="text-xs text-zinc-400 mb-4">{item.subtitle}</p>
+                  <div className="relative h-44 rounded-xl overflow-hidden mb-4 bg-zinc-950">
+                    <img src={item.img} alt={item.name} className="w-full h-full object-cover" />
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-amber-400 border border-zinc-700">
+                      {item.status}
+                    </div>
+                  </div>
 
-                  <div className="space-y-2 mb-6">
-                    {item.features.map((feat, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-zinc-300 font-mono">
-                        <Check className="w-3.5 h-3.5 text-rose-400 flex-shrink-0" />
-                        <span>{feat}</span>
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">{item.id}</span>
+                  <h3 className="text-base font-bold text-white mb-2 leading-snug">{item.name}</h3>
+
+                  <div className="space-y-1 mb-4">
+                    {item.specs.map((spec, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs font-mono text-zinc-300">
+                        <Check className="w-3 h-3 text-amber-400 flex-shrink-0" />
+                        <span>{spec}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between">
-                  <span className="text-sm font-bold text-rose-400 font-mono">{item.rate}</span>
-                  <a
-                    href="#booking"
-                    onClick={() => setSelectedItem(item.id)}
-                    className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-rose-500 hover:text-zinc-950 text-zinc-200 text-xs font-semibold transition"
+                <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between">
+                  <div>
+                    <span className="text-sm font-extrabold font-mono text-amber-400">${item.dayRate} / Day</span>
+                    <span className="text-[10px] font-mono text-zinc-500 block">Repl Value: ${item.replacementValue.toLocaleString()}</span>
+                  </div>
+
+                  <button
+                    onClick={() => toggleCart(item.id)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 ${
+                      inCart 
+                        ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700' 
+                        : 'bg-amber-500 text-zinc-950 hover:bg-amber-400 shadow-md shadow-amber-500/20'
+                    }`}
                   >
-                    Select Option
-                  </a>
+                    {inCart ? 'Remove from Package' : '+ Add to Rental'}
+                  </button>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-      </section>
 
-      {/* Booking / Intake Form */}
-      <section id="booking" className="py-20 px-6 bg-zinc-950 border-t border-zinc-800">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="text-xs font-mono text-rose-500 uppercase tracking-widest block mb-2">PRIORITY INTAKE</span>
-            <h3 className="text-3xl font-extrabold text-white">Reserve Session or Submit Consultation</h3>
-            <p className="text-zinc-400 text-sm mt-3">Direct integration into PostgreSQL records with instant deposit triage.</p>
+        {/* Sub-Rental Cart & COI Verification Manifest */}
+        <section className="p-6 sm:p-8 rounded-3xl bg-[#121214] border border-amber-500/30 shadow-2xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-zinc-800 gap-4 mb-6">
+            <div>
+              <span className="text-xs font-mono text-amber-400 uppercase tracking-widest block">PRODUCTION GEAR MANIFEST</span>
+              <h3 className="text-xl font-bold text-white">Active Rental Package ({cart.length} Items)</h3>
+            </div>
+
+            {/* COI Status Pill */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-mono">
+              <Shield className="w-4 h-4 text-emerald-400" />
+              <span>COI INSURANCE: <strong>{coiUploaded ? 'CERTIFICATE ON FILE' : 'PENDING UPLOAD'}</strong></span>
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-8 rounded-2xl bg-[#121214] border border-rose-500/20 shadow-2xl space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-mono uppercase text-zinc-400 mb-2">Client / Production Entity</label>
-                <input
-                  type="text"
-                  required
-                  value={inquiryName}
-                  onChange={(e) => setInquiryName(e.target.value)}
-                  placeholder="e.g. Sterling Productions LLC"
-                  className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-100 focus:outline-none focus:border-rose-500 text-sm font-sans"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-mono uppercase text-zinc-400 mb-2">Direct Phone / Mobile</label>
-                <input
-                  type="tel"
-                  required
-                  value={inquiryPhone}
-                  onChange={(e) => setInquiryPhone(e.target.value)}
-                  placeholder="+1 (555) 234-5678"
-                  className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-100 focus:outline-none focus:border-rose-500 text-sm font-sans"
-                />
-              </div>
-            </div>
+          {/* Cart Item Row Summary */}
+          <div className="space-y-2 mb-6">
+            {cart.map((cId) => {
+              const item = GEAR.find(g => g.id === cId);
+              if (!item) return null;
+              return (
+                <div key={cId} className="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800 flex items-center justify-between text-xs font-mono">
+                  <div className="flex items-center gap-2">
+                    <Box className="w-4 h-4 text-amber-400" />
+                    <span className="text-white font-bold">{item.name}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-zinc-400">${item.dayRate} / day × {multiplier} = <strong className="text-amber-400">${item.dayRate * multiplier}</strong></span>
+                    <button onClick={() => toggleCart(cId)} className="text-zinc-500 hover:text-red-400">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
+          {/* Financial Breakdown */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 mb-6 text-xs font-mono">
             <div>
-              <label className="block text-xs font-mono uppercase text-zinc-400 mb-2">Selected Package</label>
-              <select
-                value={selectedItem}
-                onChange={(e) => setSelectedItem(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-100 focus:outline-none focus:border-rose-500 text-sm font-sans"
-              >
-                {ITEMS.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.id} - {item.title} ({item.rate})
-                  </option>
-                ))}
-              </select>
+              <span className="text-zinc-500 block mb-1">TOTAL EQUIPMENT REPLACEMENT LIABILITY:</span>
+              <span className="text-base font-bold text-rose-400">${totalReplacementLiability.toLocaleString()} USD</span>
+              <span className="text-[10px] text-zinc-500 block">Requires $1M Inland Marine Floater naming CineGrip as Loss Payee</span>
             </div>
+            <div className="text-right">
+              <span className="text-zinc-500 block mb-1">TOTAL ESTIMATED RENTAL INVOICE:</span>
+              <span className="text-2xl font-extrabold text-amber-400">${totalRentalCost.toLocaleString()} USD</span>
+              <span className="text-[10px] text-zinc-500 block">{rentalDuration.toUpperCase()} Rate Multiplier Applied</span>
+            </div>
+          </div>
 
+          {/* Booking Form */}
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input
+              type="text"
+              required
+              value={prodCompany}
+              onChange={(e) => setProdCompany(e.target.value)}
+              placeholder="Production Company / LLC"
+              className="px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-500"
+            />
+            <input
+              type="tel"
+              required
+              value={producerPhone}
+              onChange={(e) => setProducerPhone(e.target.value)}
+              placeholder="Producer Line (Call Sheet)"
+              className="px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-500"
+            />
             <button
               type="submit"
-              className="w-full py-4 rounded-xl bg-rose-500 hover:bg-rose-400 text-zinc-950 font-extrabold text-sm uppercase tracking-wider transition shadow-lg shadow-rose-500/20"
+              className="py-3 px-6 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-amber-500/25"
             >
-              {submitted ? '✓ RESERVATION CONFIRMED & LOGGED' : 'SUBMIT APPOINTMENT RESERVATION'}
+              {submitted ? '✓ RENTAL PACK RESERVED' : 'SUBMIT PRODUCTION ORDER'}
             </button>
           </form>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-zinc-800 bg-[#0A0A0B] text-zinc-500 text-xs font-mono">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <span className="text-zinc-300 font-bold">CINEGRIP EQUIPMENT OS</span> • Commercial Studio OS v1.0.0
-          </div>
-          <div className="flex items-center gap-6">
-            <span>Ghost Factory™ Protocol</span>
-            <span>Supabase RLS Enforced</span>
-            <button
-              onClick={() => setIsAdminOpen(true)}
-              className="text-rose-400 hover:underline"
-            >
-              Admin Portal (cinegrip2026)
-            </button>
-          </div>
-        </div>
-      </footer>
+        </section>
+      </main>
 
       {/* Admin Modal */}
       <AdminPortalModal isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
