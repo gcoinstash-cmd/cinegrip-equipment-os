@@ -145,14 +145,14 @@ export default function App() {
               <Camera className="w-5 h-5 text-zinc-950" />
             </div>
             <div>
-              <span className="text-[10px] font-mono text-amber-500 uppercase tracking-widest block font-bold">STAGE EQUIPMENT VAULT</span>
+              <span className="text-xs font-semibold tracking-wider font-mono text-amber-500 uppercase tracking-widest block font-bold">STAGE EQUIPMENT VAULT</span>
               <h1 className="text-sm font-extrabold text-white leading-none">CINEGRIP OS</h1>
             </div>
           </div>
 
           {/* Side-Rail Categories */}
           <nav className="space-y-1.5 text-xs font-mono">
-            <span className="text-[10px] text-zinc-500 uppercase tracking-widest block mb-2 px-2">GEAR LOCKERS</span>
+            <span className="text-xs font-semibold tracking-wider text-zinc-300 uppercase tracking-widest block mb-2 px-2">GEAR LOCKERS</span>
             {[
               { id: 'all', label: 'All Equipment' },
               { id: 'camera', label: 'Cinema Cameras' },
@@ -179,7 +179,7 @@ export default function App() {
         {/* Bottom Locker Stats & Admin Door */}
         <div className="pt-6 border-t border-zinc-800/80 space-y-4 text-xs font-mono">
           <div>
-            <span className="text-[10px] text-zinc-500 uppercase block">GEAR READINESS</span>
+            <span className="text-xs font-semibold tracking-wider text-zinc-300 uppercase block">GEAR READINESS</span>
             <span className="text-sm font-bold text-amber-400 font-mono">99.8% QC CHECKED</span>
           </div>
 
@@ -241,12 +241,12 @@ export default function App() {
                 <div>
                   <div className="relative h-44 rounded-xl overflow-hidden mb-4 bg-zinc-950">
                     <img src={item.img} alt={item.name} className="w-full h-full object-cover" />
-                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-amber-400 border border-zinc-700">
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-xs font-semibold tracking-wider font-mono font-bold text-amber-400 border border-zinc-700">
                       {item.status}
                     </div>
                   </div>
 
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">{item.id}</span>
+                  <span className="text-xs font-semibold tracking-wider font-mono text-zinc-400 uppercase tracking-widest">{item.id}</span>
                   <h3 className="text-base font-bold text-white mb-2 leading-snug">{item.name}</h3>
 
                   <div className="space-y-1 mb-4">
@@ -262,7 +262,7 @@ export default function App() {
                 <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between">
                   <div>
                     <span className="text-sm font-extrabold font-mono text-amber-400">${item.dayRate} / Day</span>
-                    <span className="text-[10px] font-mono text-zinc-500 block">Repl Value: ${item.replacementValue.toLocaleString()}</span>
+                    <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 block">Repl Value: ${item.replacementValue.toLocaleString()}</span>
                   </div>
 
                   <button
@@ -309,7 +309,7 @@ export default function App() {
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="text-zinc-400">${item.dayRate} / day × {multiplier} = <strong className="text-amber-400">${item.dayRate * multiplier}</strong></span>
-                    <button onClick={() => toggleCart(cId)} className="text-zinc-500 hover:text-red-400">
+                    <button onClick={() => toggleCart(cId)} className="text-zinc-300 hover:text-red-400">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -321,14 +321,14 @@ export default function App() {
           {/* Financial Breakdown */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 mb-6 text-xs font-mono">
             <div>
-              <span className="text-zinc-500 block mb-1">TOTAL EQUIPMENT REPLACEMENT LIABILITY:</span>
+              <span className="text-zinc-300 block mb-1">TOTAL EQUIPMENT REPLACEMENT LIABILITY:</span>
               <span className="text-base font-bold text-rose-400">${totalReplacementLiability.toLocaleString()} USD</span>
-              <span className="text-[10px] text-zinc-500 block">Requires $1M Inland Marine Floater naming CineGrip as Loss Payee</span>
+              <span className="text-xs font-semibold tracking-wider text-zinc-300 block">Requires $1M Inland Marine Floater naming CineGrip as Loss Payee</span>
             </div>
             <div className="text-right">
-              <span className="text-zinc-500 block mb-1">TOTAL ESTIMATED RENTAL INVOICE:</span>
+              <span className="text-zinc-300 block mb-1">TOTAL ESTIMATED RENTAL INVOICE:</span>
               <span className="text-2xl font-extrabold text-amber-400">${totalRentalCost.toLocaleString()} USD</span>
-              <span className="text-[10px] text-zinc-500 block">{rentalDuration.toUpperCase()} Rate Multiplier Applied</span>
+              <span className="text-xs font-semibold tracking-wider text-zinc-300 block">{rentalDuration.toUpperCase()} Rate Multiplier Applied</span>
             </div>
           </div>
 
@@ -352,7 +352,7 @@ export default function App() {
             />
             <button
               type="submit"
-              className="py-3 px-6 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-amber-500/25"
+              className="py-3 px-6 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-base font-semibold min-h-[44px] font-mono uppercase tracking-wider transition shadow-lg shadow-amber-500/25"
             >
               {submitted ? '✓ RENTAL PACK RESERVED' : 'SUBMIT PRODUCTION ORDER'}
             </button>
